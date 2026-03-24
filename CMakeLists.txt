@@ -65,13 +65,13 @@ if(QRC_BUILD_STAGE1)
         )
         target_link_directories(
             qrc_stage1_single_motor_core
-            PRIVATE
+            PUBLIC
                 ${PROJECT_SOURCE_DIR}/third_party/phyarc/linux_sdk/lib/output
         )
-        target_link_libraries(qrc_stage1_single_motor_core PRIVATE MotorDrive)
+        target_link_libraries(qrc_stage1_single_motor_core PUBLIC MotorDrive)
         target_link_options(
             qrc_stage1_single_motor_core
-            PRIVATE
+            PUBLIC
                 -Wl,-rpath,${PROJECT_SOURCE_DIR}/third_party/phyarc/linux_sdk/lib/output
         )
     endif()
