@@ -65,7 +65,17 @@ cmake -S . -B build
 cmake --build build
 ```
 
-构建后会生成四个 stage 的占位可执行文件，用于确认目录和演进关系已经接通。
+默认构建后会生成四个 stage 可执行文件，其中：
+
+- `qrc_stage1_single_motor` 已接入真实单电机 CLI 骨架
+- `Stage 2~4` 当前仍是演进占位入口
+
+如果在 Linux 控制主机上接实机编译 `Stage 1`，可打开厂商 SDK：
+
+```bash
+cmake -S . -B build -DQRC_ENABLE_PHYARC_SDK=ON
+cmake --build build
+```
 
 ## 接下来怎么推进
 
@@ -75,4 +85,3 @@ cmake --build build
 4. 在 `Stage 4` 叠加 gait、状态估计、整机协调与安全状态机。
 
 更详细的分层和演进规则见 `docs/architecture.md`。
-

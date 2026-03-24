@@ -1,0 +1,27 @@
+#pragma once
+
+#include "model/motor/motor_types.hpp"
+
+namespace qrc {
+
+class MotorDriver;
+
+class SafetyManager {
+public:
+    explicit SafetyManager(MotorDriver& driver);
+
+    bool startupSequence(MotorControlMode mode);
+    void shutdownSequence();
+    bool recoverFromFault();
+    bool clearFault();
+    bool enable();
+    bool disable();
+    bool zeroIfNeeded();
+    bool calibrateIfNeeded();
+
+private:
+    MotorDriver& driver_;
+};
+
+}  // namespace qrc
+
