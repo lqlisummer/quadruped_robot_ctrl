@@ -114,6 +114,12 @@ void printTelemetry(const MotorTelemetry& t) {
               << "\n";
 }
 
+MotorTelemetry readTelemetryOnce(SingleMotorController& controller, bool fast_feedback) {
+    auto telemetry = fast_feedback ? controller.driver().readPvctFast() : controller.driver().readPvct();
+    telemetry.encoder_value = controller.driver().readEncoder();
+    return telemetry;
+}
+
 int printCommandResult(bool ok) {
     if (ok) {
         std::cout << "ok\n";
@@ -279,7 +285,11 @@ int runShell(SingleMotorController& controller, const BoardConfig& board_cfg, co
             const int period_ms = parts.size() >= 3 ? std::stoi(parts[2]) : 100;
             const bool fast_feedback = parts.size() >= 4 ? (parts[3] == "fast") : false;
             if (!controller.start(MotorControlMode::Position, fast_feedback, period_ms)) {
-                std::cout << "failed\n";
+                std::cout << "monitor startup failed, falling back to passive telemetry read\n";
+                for (int i = 0; i < count; ++i) {
+                    std::this_thread::sleep_for(std::chrono::milliseconds(period_ms));
+                    printTelemetry(readTelemetryOnce(controller, fast_feedback));
+                }
                 continue;
             }
             for (int i = 0; i < count; ++i) {
@@ -496,7 +506,12 @@ int CliApp::run(int argc, char** argv) {
             std::cerr << "monitor startup failed, attempting clear-fault and retry once\n";
             (void)controller.clearFault();
             if (!controller.start(MotorControlMode::Position, fast_feedback, period_ms)) {
-                return printCommandResult(false);
+                std::cerr << "retry failed, falling back to passive telemetry read\n";
+                for (int i = 0; i < count; ++i) {
+                    std::this_thread::sleep_for(std::chrono::milliseconds(period_ms));
+                    printTelemetry(readTelemetryOnce(controller, fast_feedback));
+                }
+                return 0;
             }
         }
         for (int i = 0; i < count; ++i) {
