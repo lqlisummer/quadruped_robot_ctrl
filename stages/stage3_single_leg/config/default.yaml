@@ -1,0 +1,37 @@
+project_stage: stage3_single_leg
+
+leg:
+  name: front_left_leg
+  joints:
+    - hip
+    - thigh
+    - knee
+  zero_offset_rad:
+    hip: 0.0
+    thigh: 0.0
+    knee: 0.0
+  link_length_m:
+    hip: 0.08
+    thigh: 0.22
+    shank: 0.22
+
+kinematics:
+  workspace_radius_m: 0.35
+  enable_jacobian_control: true
+
+trajectory:
+  mode: foot_cartesian
+  default_foot_target_m:
+    x: 0.0
+    y: 0.0
+    z: -0.32
+
+control_loop:
+  hz: 500
+  joint_mode: position
+  task_mode: virtual_leg
+
+safety:
+  max_joint_velocity_rad_s: 12.0
+  max_foot_force_n: 120.0
+

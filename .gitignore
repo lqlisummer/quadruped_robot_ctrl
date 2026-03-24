@@ -1,0 +1,14 @@
+.DS_Store
+build/
+cmake-build-*/
+out/
+dist/
+*.log
+*.csv
+*.tsv
+*.jsonl
+*.bin
+*.tmp
+*.swp
+compile_commands.json
+

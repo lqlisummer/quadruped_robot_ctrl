@@ -1,0 +1,31 @@
+project_stage: stage1_single_motor
+
+network:
+  local_ip: 192.168.1.10
+  local_port: 5001
+  remote_ip: 192.168.1.20
+  remote_port: 5000
+
+hardware:
+  vendor: phyarc
+  can_line_id: 1
+  motor_can_id: 1
+
+control_loop:
+  hz: 1000
+  mode: position_velocity_current
+
+safety:
+  max_position_rad: 3.14
+  max_velocity_rad_s: 20.0
+  max_current_a: 12.0
+
+logging:
+  enable: true
+  sample_fields:
+    - position
+    - velocity
+    - current
+    - torque_load
+    - torque_elec
+

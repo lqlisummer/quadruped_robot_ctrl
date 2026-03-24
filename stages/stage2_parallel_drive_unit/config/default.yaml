@@ -1,0 +1,30 @@
+project_stage: stage2_parallel_drive_unit
+
+drive_unit:
+  name: hip_parallel_unit
+  motor_ids:
+    - 1
+    - 2
+  can_line_ids:
+    - 1
+    - 1
+  coupling_ratio:
+    - 0.5
+    - 0.5
+
+allocation:
+  mode: weighted_distribution
+  sync_gain: 0.8
+  torque_balance_gain: 0.5
+
+control_loop:
+  hz: 1000
+  outer_mode: equivalent_position
+  inner_mode: position_velocity_current
+
+safety:
+  max_unit_position_rad: 2.6
+  max_unit_velocity_rad_s: 15.0
+  max_unit_current_a: 24.0
+  allow_single_motor_degrade: true
+

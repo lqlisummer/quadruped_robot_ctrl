@@ -1,0 +1,34 @@
+project_stage: stage4_quadruped
+
+robot:
+  leg_names:
+    - front_left
+    - front_right
+    - rear_left
+    - rear_right
+  body_mass_kg: 12.0
+  nominal_height_m: 0.32
+
+state_estimation:
+  use_imu: true
+  use_joint_feedback: true
+  use_foot_contact: true
+
+gait:
+  mode: trot
+  cycle_time_s: 0.45
+  duty_factor: 0.55
+  step_height_m: 0.05
+
+body_control:
+  mode: body_pose_plus_footstep
+  default_velocity_mps:
+    x: 0.0
+    y: 0.0
+    yaw: 0.0
+
+safety:
+  enable_fall_protection: true
+  enable_mode_fallback: true
+  max_body_roll_pitch_rad: 0.6
+
