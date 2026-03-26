@@ -3,8 +3,8 @@ project_stage: stage2_parallel_drive_unit
 drive_unit:
   name: hip_parallel_unit
   motor_ids:
-    - 1
     - 2
+    - 3
   can_line_ids:
     - 1
     - 1
