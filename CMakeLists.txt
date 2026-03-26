@@ -84,10 +84,39 @@ if(QRC_BUILD_STAGE1)
 endif()
 
 if(QRC_BUILD_STAGE2)
-    qrc_add_stage(
+    add_library(
+        qrc_stage2_parallel_drive_unit_core
+        ${PROJECT_SOURCE_DIR}/src/model/drive_unit/config_loader.cpp
+        ${PROJECT_SOURCE_DIR}/src/model/drive_unit/parallel_drive_unit.cpp
+        ${PROJECT_SOURCE_DIR}/src/platform/phyarc/board_client.cpp
+        ${PROJECT_SOURCE_DIR}/src/platform/phyarc/motor_driver.cpp
+    )
+    target_link_libraries(qrc_stage2_parallel_drive_unit_core PUBLIC qrc_core PRIVATE Threads::Threads)
+
+    if(QRC_PHYARC_SDK_ACTIVE)
+        target_include_directories(
+            qrc_stage2_parallel_drive_unit_core
+            PRIVATE
+                ${PROJECT_SOURCE_DIR}/third_party/phyarc/linux_sdk/include/c
+        )
+        target_link_directories(
+            qrc_stage2_parallel_drive_unit_core
+            PUBLIC
+                ${PROJECT_SOURCE_DIR}/third_party/phyarc/linux_sdk/lib/output
+        )
+        target_link_libraries(qrc_stage2_parallel_drive_unit_core PUBLIC MotorDrive)
+        target_link_options(
+            qrc_stage2_parallel_drive_unit_core
+            PUBLIC
+                -Wl,-rpath,${PROJECT_SOURCE_DIR}/third_party/phyarc/linux_sdk/lib/output
+        )
+    endif()
+
+    add_executable(
         qrc_stage2_parallel_drive_unit
         ${PROJECT_SOURCE_DIR}/stages/stage2_parallel_drive_unit/app/main.cpp
     )
+    target_link_libraries(qrc_stage2_parallel_drive_unit PRIVATE qrc_stage2_parallel_drive_unit_core)
 endif()
 
 if(QRC_BUILD_STAGE3)
